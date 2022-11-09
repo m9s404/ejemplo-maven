@@ -5,6 +5,9 @@ def jsonParse(def json) {
 }
 pipeline {
     agent any
+    tools {
+    maven 'maven-3.6.3' 
+    }
 
     
     stages {
@@ -13,52 +16,24 @@ pipeline {
                 git branch: 'sonar-feature', changelog: false, poll: false, url: 'https://github.com/m9s404/ejemplo-maven.git'
             }
         }
-        stage('SonarQube analysis') {
-            steps{
-                withSonarQubeEnv(credentialsId: 'SoniSecret', installationName: 'Sonita') {
-            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar \
-                -Dsonar.target=sonar.java.binaries'
-            }
-            }
-            
-        }
-        stage("Paso 1: Saludar"){
-            steps {
-                script {
-                sh "echo 'Hello, World Usach!'"
-                }
-            }
-        }
-        stage("Paso 2: Crear Archivo"){
-            steps {
-                script {
-                sh "echo 'Hello, World Usach!!' > hello-devops-usach-.txt"
-                }
-            }
-        }
-        stage("Paso 3: Guardar Archivo"){
-            steps {
-                script {
-                sh "echo 'Persisitir Archivo!'"
-                }
-            }
-            post {
-                //record the test results and archive the jar file.
-                success {
-                    archiveArtifacts(artifacts:'**/*.txt', followSymlinks:false)
-                }
+        
+    stages {
+        stage ('Build') {
+        steps {
+            sh 'mvn clean package'
             }
         }
     }
-    post {
-        always {
-            sh "echo 'fase always executed post'"
+
+    stage('SonarQube analysis') {
+        steps{
+            withSonarQubeEnv(credentialsId: 'SoniSecret', installationName: 'Sonita') {
+        sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar \
+            -Dsonar.target=sonar.java.binaries'
         }
-        success {
-            sh "echo 'fase success'"
         }
-        failure {
-            sh "echo 'fase failure'"
-        }
-    }
+        
+    } 
+}
+
 }
