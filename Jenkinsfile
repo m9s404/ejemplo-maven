@@ -5,17 +5,10 @@ def jsonParse(def json) {
 }
 pipeline {
     agent any
+
+    
     stages {
-        node {
-            stage('SCM') {
-                git 'https://github.com/m9s404/ejemplo-maven.git'
-            }
-            stage('SonarQube analysis') {
-                withSonarQubeEnv(credentialsId: 'SoniSecret', installationName: 'Sonita') {
-                sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
-                }
-            }
-            }
+        
         // stage('Sonarqube') {
         //     environment {
         //         scannerHome = tool 'SonarQubeScanner'
@@ -29,6 +22,18 @@ pipeline {
         //         }
         //     }
         // }
+        stage('Sonarqube') {
+            node {
+            stage('SCM') {
+                git 'https://github.com/m9s404/ejemplo-maven.git'
+            }
+            stage('SonarQube analysis') {
+                withSonarQubeEnv(credentialsId: 'SoniSecret', installationName: 'Sonita') {
+                sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+                }
+            }
+            }
+        }
         stage("Paso 1: Saludar"){
             steps {
                 script {
