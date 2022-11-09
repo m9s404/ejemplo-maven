@@ -16,7 +16,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps{
                 withSonarQubeEnv(credentialsId: 'SoniSecret', installationName: 'Sonita') {
-            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:4.7.0.2747:sonar'
+            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
             }
             }
             
