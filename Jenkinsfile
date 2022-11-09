@@ -8,6 +8,14 @@ pipeline {
 
     
     stages {
+        stage('SCM') {
+            git 'https://github.com/m9s404/ejemplo-maven.git'
+        }
+        stage('SonarQube analysis') {
+            withSonarQubeEnv(credentialsId: 'SoniSecret', installationName: 'Sonita') { // You can override the credential to be used
+            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:4.7.0.2747:sonar'
+            }
+        }
         stage("Paso 1: Saludar"){
             steps {
                 script {
