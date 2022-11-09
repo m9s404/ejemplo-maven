@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('SCM') {
             steps {
-                git 'https://github.com/m9s404/ejemplo-maven.git'
+                git branch: 'sonar-feature', changelog: false, poll: false, url: 'https://github.com/m9s404/ejemplo-maven.git'
             }
         }
         stage('SonarQube analysis') {
