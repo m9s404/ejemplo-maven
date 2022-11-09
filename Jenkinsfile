@@ -8,32 +8,6 @@ pipeline {
 
     
     stages {
-        
-        // stage('Sonarqube') {
-        //     environment {
-        //         scannerHome = tool 'SonarQubeScanner'
-        //     }
-        //     steps {
-        //         withSonarQubeEnv('sonarqube') {
-        //             sh "${scannerHome}/bin/sonar-scanner"
-        //         }
-        //         timeout(time: 10, unit: 'MINUTES') {
-        //             waitForQualityGate abortPipeline: true
-        //         }
-        //     }
-        // }
-        stage('Sonarqube') {
-            node {
-            stage('SCM') {
-                git 'https://github.com/m9s404/ejemplo-maven.git'
-            }
-            stage('SonarQube analysis') {
-                withSonarQubeEnv(credentialsId: 'SoniSecret', installationName: 'Sonita') {
-                sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
-                }
-            }
-            }
-        }
         stage("Paso 1: Saludar"){
             steps {
                 script {
