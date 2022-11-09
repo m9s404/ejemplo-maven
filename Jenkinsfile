@@ -6,19 +6,29 @@ def jsonParse(def json) {
 pipeline {
     agent any
     stages {
-        stage('Sonarqube') {
-            environment {
-                scannerHome = tool 'SonarQubeScanner'
+        node {
+            stage('SCM') {
+                git 'https://github.com/m9s404/ejemplo-maven.git'
             }
-            steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                }
-                timeout(time: 10, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
+            stage('SonarQube analysis') {
+                withSonarQubeEnv(credentialsId: 'SoniSecret', installationName: 'Sonita') {
+                sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
                 }
             }
-        }
+            }
+        // stage('Sonarqube') {
+        //     environment {
+        //         scannerHome = tool 'SonarQubeScanner'
+        //     }
+        //     steps {
+        //         withSonarQubeEnv('sonarqube') {
+        //             sh "${scannerHome}/bin/sonar-scanner"
+        //         }
+        //         timeout(time: 10, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
         stage("Paso 1: Saludar"){
             steps {
                 script {
