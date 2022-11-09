@@ -6,7 +6,7 @@ def jsonParse(def json) {
 pipeline {
     agent any
     tools {
-    maven 'maven-3.6.3' 
+    maven 'Maven-1' 
     }
 
     
@@ -16,7 +16,7 @@ pipeline {
                 git branch: 'sonar-feature', changelog: false, poll: false, url: 'https://github.com/m9s404/ejemplo-maven.git'
             }
         }
-        
+
     stages {
         stage ('Build') {
         steps {
